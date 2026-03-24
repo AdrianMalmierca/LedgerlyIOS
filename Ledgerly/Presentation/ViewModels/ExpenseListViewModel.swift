@@ -18,7 +18,7 @@ final class ExpenseListViewModel: ObservableObject {
     @Published var selectedCategory: String? = nil
     
     // MARK: - Outputs
-    //with private(set) we can only modify these properties within the view model, but the view can read them and react to changes
+    //with private(set) we can onnly modify these properties within the view model, but the view can read them and react to changes
     @Published private(set) var expenses: [Expense] = []
     @Published private(set) var filteredExpenses: [Expense] = []
     
