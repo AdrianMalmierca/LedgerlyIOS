@@ -6,13 +6,12 @@ final class NotificationService {
     static let shared = NotificationService()
     
     //Ask for permission
-    func requestAuthorization() {
+    func requestAuthorization(completion: @escaping (Bool, Error?) -> Void) {
         UNUserNotificationCenter.current()
             .requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-                if let error = error {
-                    print("Error requesting authorization: \(error)")
+                DispatchQueue.main.async {
+                    completion(granted, error)
                 }
-                print("Permission granted: \(granted)")
             }
     }
     
