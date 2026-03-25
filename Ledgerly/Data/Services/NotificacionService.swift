@@ -1,10 +1,3 @@
-//
-//  NotificacionService.swift
-//  Ledgerly
-//
-//  Created by Adrián on 23/2/26.
-//
-
 import Foundation
 import UserNotifications
 
@@ -14,7 +7,7 @@ final class NotificationService {
     
     private init() {}
     
-    // Solicitar permiso
+    //Ask for permission
     func requestAuthorization() {
         UNUserNotificationCenter.current()
             .requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
@@ -28,8 +21,8 @@ final class NotificationService {
     // Programar recordatorio diario
     func scheduleDailyReminder(at hour: Int = 20) {
         let content = UNMutableNotificationContent()
-        content.title = "No olvides tus gastos"
-        content.body = "Registra tus gastos del día para mantener tu presupuesto actualizado."
+        content.title = "Don't forget your expenses"
+        content.body = "Record your daily expenses to keep your budget up to date."
         content.sound = .default
         
         var dateComponents = DateComponents()
