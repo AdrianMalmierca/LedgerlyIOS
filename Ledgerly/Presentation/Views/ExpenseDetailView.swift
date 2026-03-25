@@ -1,10 +1,3 @@
-//
-//  DetailView.swift
-//  Ledgerly
-//
-//  Created by Adrián on 16/2/26.
-//
-
 import SwiftUI
 
 struct ExpenseDetailView: View {
