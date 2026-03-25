@@ -1,10 +1,3 @@
-//
-//  LottieView.swift
-//  Ledgerly
-//
-//  Created by Adrián on 16/2/26.
-//
-
 import SwiftUI
 import Lottie
 
@@ -21,7 +14,7 @@ struct LottieView: UIViewRepresentable {
         animationView.loopMode = .playOnce //is played only once
         animationView.play() //start the animation
 
-        animationView.translatesAutoresizingMaskIntoConstraints = false //enable Auto Layout for the animation view
+        animationView.translatesAutoresizingMaskIntoConstraints = false //not generate constraints
         view.addSubview(animationView)
         NSLayoutConstraint.activate([
             animationView.widthAnchor.constraint(equalTo: view.widthAnchor),
