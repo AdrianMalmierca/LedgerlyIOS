@@ -1,11 +1,3 @@
-//
-//  ExpenseRepository.swift
-//  Ledgerly
-//
-//  Created by Adrián on 16/2/26.
-//
-
-
 import Foundation
 import CoreData
 
@@ -39,7 +31,7 @@ final class ExpenseRepository: ExpenseRepositoryProtocol {
         }
     }
     
-    func addExpense(_ expense: Expense) {
+    func insertExpense(_ expense: Expense) {
         //you create a new ExpenseEntity in the context and set its properties
         let entity = ExpenseEntity(context: context)
         entity.id = expense.id
@@ -47,6 +39,11 @@ final class ExpenseRepository: ExpenseRepositoryProtocol {
         entity.amount = expense.amount
         entity.date = expense.date
         entity.category = expense.category
+    }
+    
+    func addExpense(_ expense: Expense) {
+        insertExpense(expense)
+        try? context.save()
     }
     
     func deleteExpense(_ expense: Expense) {

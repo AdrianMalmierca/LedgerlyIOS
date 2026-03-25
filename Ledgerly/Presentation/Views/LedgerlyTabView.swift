@@ -12,6 +12,13 @@ struct LedgerlyTabView: View {
     @State private var showingAdd = false
     
     private let categories = ["Food", "Transport", "Bills", "Other"]
+    
+    init() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground() //solid background
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+    }
 
     var body: some View {
         TabView {

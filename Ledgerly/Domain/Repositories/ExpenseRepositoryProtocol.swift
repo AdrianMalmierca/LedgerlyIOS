@@ -1,10 +1,3 @@
-//
-//  ExpenseRepositoryProtocol.swift
-//  Ledgerly
-//
-//  Created by Adrián on 16/2/26.
-//
-
 import Foundation
 
 protocol ExpenseRepositoryProtocol {

@@ -1,10 +1,3 @@
-//
-//  Expense.swift
-//  Ledgerly
-//
-//  Created by Adrián on 16/2/26.
-//
-
 import Foundation
 
 struct Expense: Identifiable, Codable {

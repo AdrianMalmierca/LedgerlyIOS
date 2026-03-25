@@ -1,10 +1,3 @@
-//
-//  NetworkService.swift
-//  Ledgerly
-//
-//  Created by Adrián on 16/2/26.
-//
-
 import Foundation
 
 //any class that implements this protocol must provide these two methods, one for fetching expenses and another for sending an expense to the backend

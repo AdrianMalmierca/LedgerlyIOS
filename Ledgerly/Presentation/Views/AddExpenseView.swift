@@ -47,12 +47,11 @@ struct AddExpenseView: View {
                                 dismiss()
                             }
                         }
-                    }.sheet(isPresented: $showAnimation) {
-                        LottieView(name: "success")
-                            .frame(width: 200, height: 200)
-                    }
-                    .disabled(title.isEmpty || amount.isEmpty) //avoid saving an expense without title or amount
+                    }.disabled(title.isEmpty || amount.isEmpty) //avoid saving an expense without title or amount
                 }
+            }.sheet(isPresented: $showAnimation) {
+                LottieView(name: "success")
+                    .frame(width: 200, height: 200)
             }
         }
     }
