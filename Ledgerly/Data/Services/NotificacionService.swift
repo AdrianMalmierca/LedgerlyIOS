@@ -5,8 +5,6 @@ final class NotificationService {
     
     static let shared = NotificationService()
     
-    private init() {}
-    
     //Ask for permission
     func requestAuthorization() {
         UNUserNotificationCenter.current()
@@ -18,7 +16,7 @@ final class NotificationService {
             }
     }
     
-    // Programar recordatorio diario
+    //Schedule daily reminder
     func scheduleDailyReminder(at hour: Int = 20) {
         let content = UNMutableNotificationContent()
         content.title = "Don't forget your expenses"
