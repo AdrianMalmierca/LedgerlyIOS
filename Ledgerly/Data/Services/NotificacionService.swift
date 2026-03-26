@@ -36,6 +36,38 @@ final class NotificationService {
             trigger: trigger
         )
         
-        UNUserNotificationCenter.current().add(request)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Notification scheduling failed: \(error)")
+            }
+        }
+    }
+    
+    
+    func scheduleOnLaunchReminder() {
+        let content = UNMutableNotificationContent()
+        content.title = "Don't forget your expenses"
+        content.body = "Record your daily expenses to keep your budget up to date."
+        content.sound = .default
+
+        //It fires 5 seconds after startup, with no repeat.
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+
+        let request = UNNotificationRequest(
+            identifier: "launchReminder",
+            content: content,
+            trigger: trigger
+        )
+
+        //Cancel the previous one before scheduling a new one
+        UNUserNotificationCenter.current().removePendingNotificationRequests(
+            withIdentifiers: ["launchReminder"]
+        )
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Notification scheduling failed: \(error)")
+            }
+        }
     }
 }

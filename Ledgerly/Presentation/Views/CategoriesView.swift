@@ -33,5 +33,3 @@ struct CategoriesGridView: View {
         .frame(height: 60)
     }
 }
-
-
