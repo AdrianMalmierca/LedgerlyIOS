@@ -17,22 +17,22 @@ struct AddExpenseView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Details") {
-                    TextField("Title", text: $title)
-                    TextField("Amount", text: $amount).keyboardType(.decimalPad)
+                Section("section_details") {
+                    TextField("field_title", text: $title)
+                    TextField("field_amount", text: $amount).keyboardType(.decimalPad)
                 }
                 
-                Section("Category") {
-                    Picker("Select category", selection: $category) {
+                Section("section_category") {
+                    Picker("picker_category", selection: $category) {
                         ForEach(categories, id: \.self) { category in
                             Text(category)
                         }
                     }.pickerStyle(.menu) // could be .segmented or .wheel depending the preference
                 }
-            }.navigationTitle("New Expense")
+            }.navigationTitle("new_expense_title")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Save") {
+                    Button("save_button") {
                         if let value = Double(amount) {
                             onSave(title, value, category)
                             showAnimation = true

@@ -18,8 +18,8 @@ final class NotificationService {
     //Schedule daily reminder
     func scheduleDailyReminder(at hour: Int = 20) {
         let content = UNMutableNotificationContent()
-        content.title = "Don't forget your expenses"
-        content.body = "Record your daily expenses to keep your budget up to date."
+        content.title = String(localized: "notification_title")
+        content.body = String(localized: "notification_body")
         content.sound = .default
         
         var dateComponents = DateComponents()
@@ -46,8 +46,8 @@ final class NotificationService {
     
     func scheduleOnLaunchReminder() {
         let content = UNMutableNotificationContent()
-        content.title = "Don't forget your expenses"
-        content.body = "Record your daily expenses to keep your budget up to date."
+        content.title = String(localized: "notification_title")
+        content.body = String(localized: "notification_body")
         content.sound = .default
 
         //It fires 5 seconds after startup, with no repeat.

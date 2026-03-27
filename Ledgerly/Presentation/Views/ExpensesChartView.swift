@@ -8,14 +8,14 @@ struct ExpensesChartView: View {
         Chart {
             ForEach(expenses) { expense in
                 BarMark(
-                    x: .value("Category", expense.category),
-                    y: .value("Amount", expense.amount)
+                    x: .value("section_category", expense.category),
+                    y: .value("section_amount", expense.amount)
                 )
-                .foregroundStyle(by: .value("Category", expense.category))
+                .foregroundStyle(by: .value("section_category", expense.category))
             }
         }
-        .chartXAxisLabel("Category")
-        .chartYAxisLabel("Amount (€)")
+        .chartXAxisLabel("section_category")
+        .chartYAxisLabel("section_amount")
         .frame(height: 250)
     }
 }

@@ -18,7 +18,7 @@ struct LedgerlyTabView: View {
             //Expense list
             NavigationStack {
                 VStack {
-                    TextField("Buscar gasto...", text: $viewModel.searchText)
+                    TextField("search_placeholder", text: $viewModel.searchText)
                         .textFieldStyle(.roundedBorder)
                         .padding(.horizontal)
                     
@@ -33,7 +33,8 @@ struct LedgerlyTabView: View {
                                 VStack(alignment: .leading) {
                                     Text(expense.title)
                                         .font(.headline)
-                                    Text("\(expense.amount, specifier: "%.2f") €")
+                                    (Text(expense.amount, format: .number.precision(.fractionLength(2)))
+                                        + Text(" €"))
                                         .foregroundColor(.red)
                                 }
                             }
@@ -58,7 +59,7 @@ struct LedgerlyTabView: View {
                     }
                     
                     ToolbarItem(placement: .topBarLeading) {
-                        Button("Sync") {
+                        Button("sync_button") {
                             Task {
                                 await viewModel.sync()
                             }
@@ -72,16 +73,16 @@ struct LedgerlyTabView: View {
                 }
             }
             .tabItem {
-                Label("Gastos", systemImage: "list.bullet")
+                Label("tab_expenses", systemImage: "list.bullet")
             }
 
             //Expense chart
             NavigationStack {
                 ExpensesChartView(expenses: viewModel.expenses)
-                    .navigationTitle("Gráfico")
+                    .navigationTitle("tab_chart")
             }
             .tabItem {
-                Label("Gráfico", systemImage: "chart.bar")
+                Label("tab_chart", systemImage: "chart.bar")
             }
         }
     }
