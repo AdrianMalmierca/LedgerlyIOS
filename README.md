@@ -28,26 +28,32 @@ Ledgerly solves this by providing a clean, offline-first iOS app that:
 
 ### Main
 The first page you see when you open the app is Ledgerly page. Here you can see all the expenses with the title and the amount.
+
 <img src="assets/Main.png" width="300">
 
 ### Detail
 If you click on an expense, you'll see all the information of an expense: the name, amount, category and date.
+
 <img src="assets/Detail.png" width="300">
 
 ### Add Expense
 When you click on the + button you can create an expense, saying the title, amount and category.
+
 <img src="assets/AddExpense.png" width="300">
 
 ### Chart
 In the second tab you can see a chart with all the categories.
+
 <img src="assets/Chart.png" width="300">
 
 ### Filter
 You can filter the expenses if you click on the expenses menu.
+
 <img src="assets/Filter.png" width="300">
 
 ### Search
 You can search an expense by name.
+
 <img src="assets/Search.png" width="300">
 
 ---
