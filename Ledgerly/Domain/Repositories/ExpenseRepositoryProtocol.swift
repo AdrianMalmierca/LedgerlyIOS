@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 protocol ExpenseRepositoryProtocol {
     func fetchLocalExpenses() -> [Expense]
     func addExpense(_ expense: Expense)

@@ -1,13 +1,14 @@
 import Foundation
 import CoreData
 
+@MainActor
 final class ExpenseRepository: ExpenseRepositoryProtocol {
     
     private let context = CoreDataStack.shared.context
     private let network: NetworkServiceProtocol
     
-    init(network: NetworkServiceProtocol = NetworkService()) {
-        self.network = network
+    init(network: NetworkServiceProtocol? = nil) {
+        self.network = network ?? NetworkService()
     }
     
     func fetchLocalExpenses() -> [Expense] {
