@@ -1,147 +1,235 @@
-# Ledgerly
-Ledgerly is a personal expense tracking iOS application built with **Swift** and **SwiftUI**. It allows users to add, view, categorize, and visualize their expenses with a modern, intuitive interface. Ledgerly also supports local persistence via **Core Data** and synchronization with a backend service.
+# Ledgerly — Personal Expense Tracker for iOS
 
-## Why SwiftUI instead of UIKit
-SwiftUI is used in Ledgerly for several reasons:
-- **Declarative Syntax:** UI is defined in a clear and concise way, reducing boilerplate code.
-- **Live Previews:** SwiftUI allows real-time previews, speeding up development and iteration.
-- **Reactive and State-Driven:** The UI automatically updates when data changes, integrating seamlessly with Combine.
-- **Cross-Platform Potential:** SwiftUI can be used across iOS, macOS, iPadOS, and watchOS with minimal changes.
-- **Future-Proof:** Apple is heavily investing in SwiftUI as the standard for modern UI development.
+![SwiftUI](https://img.shields.io/badge/SwiftUI-5-blue?style=flat-square&logo=swift)
+![Swift](https://img.shields.io/badge/Swift-5.9-orange?style=flat-square&logo=swift)
+![CoreData](https://img.shields.io/badge/CoreData-persistent-lightgrey?style=flat-square)
+![Combine](https://img.shields.io/badge/Combine-reactive-purple?style=flat-square)
+![Lottie](https://img.shields.io/badge/Lottie-4-00DDB3?style=flat-square)
+![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20iPadOS-black?style=flat-square&logo=apple)
+
+A production-ready iOS expense tracker built with SwiftUI and MVVM architecture, featuring CoreData persistence, reactive filtering with Combine, Swift Charts visualization, local push notifications, and full English/French localization.
+
+---
+
+## Problem Statement
+
+Individuals managing personal budgets need a fast, reliable way to record, categorize, and review daily expenses — without depending on a cloud subscription or giving up their data to a third-party service.
+
+Ledgerly solves this by providing a clean, offline-first iOS app that:
+- Stores all data locally with CoreData, with optional backend sync
+- Filters and searches expenses reactively using Combine publishers
+- Visualizes spending by category with Swift Charts
+- Reminds users to log expenses daily via local notifications
+- Supports English and French out of the box
+
+---
+
+## Screenshots
+
+> iPhone SE · iPhone 16 · iPad — all screen sizes supported from iOS 16 onwards.
+
+---
 
 ## Features
+
 ### Expense Management
-- Add, edit, and delete expenses.
-- Assign categories to expenses (Food, Transport, Bills, Other).
-- Search and filter expenses by title or category.
+- Add expenses with title, amount, date, and category
+- Swipe to delete with immediate CoreData persistence
+- Navigate to a detail view for each expense
+- Categories: Food, Transport, Bills, Other
 
-### Data Persistence
-- Local storage using **Core Data**.
-- Repository pattern ensures clean separation of data layer and business logic.
+### Reactive Search & Filtering
+- Live search by title using a Combine `CombineLatest` publisher
+- Filter by category using a horizontal `LazyHGrid` chip selector
+- Both filters compose — category + search work simultaneously
+- All filtering happens in the ViewModel, never in the View
 
-### Backend Integration
-- Fetches remote expenses from a public API for demonstration purposes.
-- Synchronizes local expenses with remote data asynchronously.
+### Backend Sync
+- Sync button fetches remote expenses via `URLSession` async/await
+- Network layer fully encapsulated in `NetworkService` — zero network code in views
+- Deduplication logic prevents repeated sync from creating duplicates
+- Uses a public REST API (`jsonplaceholder.typicode.com`) as a mock backend
 
-### Visualizations
-- Displays expenses in a **bar chart** grouped by category using SwiftUI Charts.
-- Animated feedback on saving new expenses with **Lottie**.
+### Charts
+- Bar chart per category using Swift Charts (native, no third-party dependency)
+- Color-coded by category for immediate visual breakdown
 
-### Notifications
-- Daily reminders to record expenses using **UserNotifications**.
+### Local Notifications
+- Requests permission on first launch
+- Schedules a daily reminder at 20:00 using `UNCalendarNotificationTrigger`
+- Notifications appear even while the app is in the foreground via `UNUserNotificationCenterDelegate`
 
-### Architecture & Patterns
-- MVVM (Model-View-ViewModel) architecture.
-- Repository pattern for data management.
-- Reactive filtering using **Combine**.
+### Localization
+- Full English and French support via `Localizable.xcstrings` (String Catalog)
+- All UI strings, labels, and notification content are translated
+- Switch language from iOS Settings — no app restart needed
 
-## Requirements
-* iOS 17.0+
-* Xcode 15+
-* Swift 5.9+
+---
 
-## Project Structure
+## Tech Stack
+
+| Layer | Technology | Reason |
+|-------|-----------|--------|
+| UI Framework | SwiftUI | Declarative, adaptive layouts across all iOS/iPadOS sizes |
+| Architecture | MVVM | Clear separation between view, logic, and data |
+| Persistence | CoreData | Native iOS ORM with full lifecycle management |
+| Reactivity | Combine | `CombineLatest` for composable, reactive filtering |
+| Networking | URLSession (async/await) | Native, no external dependency needed |
+| Charts | Swift Charts | Native framework, zero overhead, full SwiftUI integration |
+| Animations | Lottie (SPM) | JSON-based animations for save confirmation feedback |
+| Notifications | UserNotifications | Local push notifications with foreground display support |
+| Localization | String Catalog (.xcstrings) | Single-file i18n with Xcode visual editor |
+| Dependency Mgmt | Swift Package Manager | Native, no Podfile needed |
+
+---
+
+## Architecture
+
+Ledgerly follows a strict MVVM architecture with a clean separation between layers:
+
 ```
 Ledgerly/
-├─ LedgerlyApp.swift           #App entry point
-├─ Data/
-│  ├─ Network/                 #Networking layer
-│  │  └─ NetworkService.swift
-│  ├─ Persistence/             #Core Data stack & models
-│  │  └─ CoreDataStack.swift
-│  └─ Repositories/            #Expense repository
-│     └─ ExpenseRepository.swift
-├─ Domain/
-│  ├─ Models/                  #Core domain models
-│  │  └─ Expense.swift
-│  └─ Repositories/            #Repository protocols
-│     └─ ExpenseRepositoryProtocol.swift
-├─ Presentation/
-│  ├─ ViewModels/              #MVVM view models
-│  │  └─ ExpenseListViewModel.swift
-│  └─ Views/                   #SwiftUI views
-│     ├─ LedgerlyTabView.swift
-│     ├─ AddExpenseView.swift
-│     ├─ CategoriesView.swift
-│     ├─ ExpenseDetailView.swift
-│     └─ ExpensesChartView.swift
+├── data/
+│   ├── network/
+│   │   └── NetworkService.swift          # URLSession calls — no network code outside this file
+│   ├── persistence/
+│   │   └── CoreDataStack.swift           # NSPersistentContainer singleton
+│   └── repositories/
+│       └── ExpenseRepository.swift       # CoreData + network coordination
+├── domain/
+│   ├── models/
+│   │   └── Expense.swift                 # Pure Swift struct — Identifiable, Codable
+│   └── repositories/
+│       └── ExpenseRepositoryProtocol.swift
+├── presentation/
+│   ├── viewmodels/
+│   │   └── ExpenseListViewModel.swift    # @MainActor ObservableObject with Combine
+│   └── views/
+│       ├── LedgerlyTabView.swift         # Root tab navigation
+│       ├── AddExpenseView.swift          # Sheet with Lottie confirmation
+│       ├── ExpenseDetailView.swift       # Read-only detail
+│       ├── ExpensesChartView.swift       # Swift Charts bar chart
+│       ├── CategoriesGridView.swift      # LazyHGrid category chips
+│       └── LottieView.swift             # UIViewRepresentable wrapper
+└── services/
+    └── NotificationService.swift         # UNUserNotificationCenter singleton
 ```
 
-## Platforms & Orientation
-Supports iPhone and iPad.
+### Key Design Decisions
 
-Compatible with iOS 17 and later (including iPhone SE).
+**Protocols everywhere** — `NetworkServiceProtocol` and `ExpenseRepositoryProtocol` decouple every layer. The ViewModel only knows the protocol, never the concrete class. This makes testing straightforward and dependencies swappable.
 
-Fully responsive in portrait and landscape orientations.
+**`@MainActor` consistency** — `ExpenseListViewModel`, `ExpenseRepository`, and `NetworkService` are all annotated `@MainActor`, eliminating actor-isolation warnings and ensuring CoreData's `viewContext` is always accessed on the main thread.
 
-## Why MVVM with Clean Architecture
-Ledgerly uses MVVM combined with Clean Architecture to improve maintainability and testability:
-1. Separation of Concerns:
-    - Model: Represents the domain objects (Expense).
-    - View: SwiftUI views are declarative and only handle UI presentation.
-    - ViewModel: Handles business logic, input validation, and prepares data for the UI.
+**Combine for filtering** — rather than recomputing filtered results on every view render, a `CombineLatest` publisher observes `searchText` and `selectedCategory` simultaneously and updates `filteredExpenses` only when either changes. This is more efficient and demonstrates reactive programming patterns.
 
-2. Clean Architecture Principles:
-- Repositories abstract data sources (local or remote) from the rest of the app.
-- Domain Layer defines protocols and models independent of the UI or persistence, making code modular and easier to test.
+**`insertExpense` vs `addExpense`** — the repository exposes a public `addExpense` (insert + save) and a private `insertExpense` (insert only). `syncWithBackend` uses the private method to batch-insert all remote expenses and calls `context.save()` exactly once at the end, avoiding N redundant saves in a loop.
 
-3. Benefits:
-- Easier to maintain and scale.
-- UI changes don't affect business logic.
-- Facilitates unit testing without UI dependencies.
+---
 
-## Installation
+## Running the Project
 
-1. Clone the repository:
+### Requirements
+- Xcode 15 or later
+- iOS 16+ simulator or physical device
+- Swift 5.9+
+
+### Setup
+
 ```bash
-   git clone https://github.com/AdrianMalmierca/Ledgerly
-```
-```bash
-   cd ledgerly
-```
+# Clone the repository
+git clone https://github.com/AdrianMalmierca/ledgerly.git
+cd ledgerly
 
-2. Open the project in Xcode:
-```bash
+# Open in Xcode
 open Ledgerly.xcodeproj
 ```
 
-3. Build and run on a simulator or device.
+Swift Package Manager will resolve dependencies (Lottie) automatically on first open.
 
-## Usage
-- Launch the app and navigate through the **Expenses** and **Chart** tabs.
-- Use the **+ button** to add a new expense.
-- Filter expenses by category using the category grid.
-- Sync local data with the remote backend by tapping **Sync**.
+Select a simulator or device and press **Run** (⌘R).
 
-## Dependencies
-- [**Lottie**](https://github.com/airbnb/lottie-ios)
-    - For animated success feedback.
-- [**SwiftUI Charts**](https://github.com/willdale/SwiftUICharts)
-    - Built-in **Swift Charts** framework for visualizations.
+### Dependencies (via Swift Package Manager)
 
-## Problems Solved by Ledgerly
-1. **Tracking Daily Expenses:** Helps users keep a clear record of all expenses, avoiding forgotten purchases or untracked spending.
-2. **Budget Awareness:** By categorizing expenses and providing visual charts, users can easily see where their money is going and identify overspending.
-3. **Manual Expense Management Complexity:** Eliminates the need for paper logs or spreadsheets by providing an intuitive digital interface.
-4. **Data Synchronization:** Even with a local-first approach, Ledgerly can sync with a backend (demo API), reducing the risk of losing expense data.
-5. **Forgetting to Record Expenses:** Daily reminders ensure that users log their expenses regularly, helping them maintain accurate records.
-6. **Quick Analysis of Spending Patterns:** Expense charts allow users to immediately visualize spending by category, enabling faster financial decisions.
+| Package | Version | Purpose |
+|---------|---------|---------|
+| [Lottie](https://github.com/airbnb/lottie-ios) | 4.x | JSON animation for save confirmation |
+
+---
+
+## Localization
+
+The app is fully localized in English and French using Xcode's String Catalog format (`.xcstrings`).
+
+To test French localization in the simulator:
+1. Product → Scheme → Edit Scheme
+2. Options tab → App Language → French
+3. Run the app
+
+All UI labels, tab names, navigation titles, form fields, and notification content are translated.
+
+---
+
+## API & Sync
+
+The sync feature uses [JSONPlaceholder](https://jsonplaceholder.typicode.com) as a mock REST backend. On sync, the app fetches the first 20 posts and maps them to `Expense` objects with randomized amounts — demonstrating the full network → repository → CoreData pipeline without requiring a real backend.
+
+The network layer is fully encapsulated:
+- `NetworkServiceProtocol` defines the interface
+- `NetworkService` implements it using `URLSession` with `async/await`
+- `ExpenseRepository` calls the network service and handles persistence
+- `ExpenseListViewModel` calls the repository — no URLSession code anywhere near a View
+
+---
+
+## What I Learned Building This
+
+### MVVM in SwiftUI
+SwiftUI's `@StateObject` and `@ObservedObject` make it easy to connect ViewModels to views, but the real discipline is keeping logic out of the view entirely. Every filter, every mutation, every async operation lives in the ViewModel or below — views only read and dispatch.
+
+### Combine for Reactive State
+Using `CombineLatest` to compose two independent filter streams into a single derived list was a clear win over managing it imperatively. The publisher graph makes the data flow explicit and the code shorter.
+
+### CoreData + Swift Concurrency
+Mixing CoreData's `viewContext` with Swift's `async/await` and actor isolation required care. Marking the entire repository `@MainActor` was the cleanest solution — it guarantees the context is always accessed on the right thread without per-method annotations.
+
+### `UNUserNotificationCenterDelegate`
+iOS silently drops local notifications when the app is in the foreground unless the delegate's `willPresent` method explicitly opts in. Implementing `AppDelegate` with `UNUserNotificationCenterDelegate` and returning `[.banner, .sound, .badge]` was a non-obvious but necessary step.
+
+### String Catalog vs Legacy `.strings`
+The new `.xcstrings` format introduced in Xcode 15 consolidates all languages into a single file with a visual editor. It's strictly better than the legacy approach — no more syncing separate files per language.
+
+---
 
 ## Future Improvements
-- **Real Backend Integration:** Replace the placeholder API with a proper backend to persist user expenses across devices.
-- **Authentication:** Add user accounts and secure login.
-- **Recurring Expenses:** Support for automatic recurring expenses (e.g., monthly bills).
-- **Advanced Analytics:** More detailed charts, trends, and category breakdowns.
-- **Dark Mode Enhancements:** Optimize UI elements for better dark mode support.
-- **Notifications Customization:** Allow users to set custom reminder times and frequencies.
-- **Localization:** Support multiple languages for international users.
-- **Expense Attachments:** Add the ability to attach receipts or images to expenses.
 
+### Short Term
+- Replace JSONPlaceholder with a real backend (FastAPI or Express) with proper expense endpoints
+- Add expense editing — currently expenses are read-only after creation
+- Add a monthly budget limit with a progress indicator
 
-## What did I learn?
-When I started to program with Swift I alwayd did using UIKit, that's why I wanted to do this project with SwiftUI, because It's gaining more and more importance in modern iOS app development. Although UIKit is still widely used, the market is currently shifting towards SwiftUI, though UIKit will continue to be used for legacy apps, for example. I've learned to work more effectively with this framework, as well as understand the structure of projects, since I've used the MVVM architecture with clean architecture.
+### Medium Term
+- iCloud sync via CloudKit for multi-device support
+- Export to CSV for spreadsheet analysis
+- Widget for home screen showing today's total spending
+
+### Long Term
+- Recurring expenses with automatic creation
+- Receipt photo attachment stored in the file system
+- Spending trends and month-over-month comparison
+
+---
+
+## License
+
+MIT — free to use, modify, and deploy.
+
+---
 
 ## Author
-Adrián Martín Malmierca
 
-Computer Engineer & Mobile Applications Master's Student
+**Adrián Martín Malmierca**  
+Computer Engineer & Mobile Applications Master's Student  
+[GitHub](https://github.com/AdrianMalmierca) · [LinkedIn](https://www.linkedin.com/in/adri%C3%A1n-mart%C3%ADn-malmierca-4aa6b0293/)
+
+*Built as a Master's project and portfolio piece targeting the French tech market — ESNs and PMEs in Burgundy/Dijon.*
