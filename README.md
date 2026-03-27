@@ -26,7 +26,30 @@ Ledgerly solves this by providing a clean, offline-first iOS app that:
 
 ## Screenshots
 
-> iPhone SE · iPhone 16 · iPad — all screen sizes supported from iOS 16 onwards.
+### Main
+The first page you see when you open the app is Ledgerly page. Here you can see all the expenses with the title and the amount.
+![Main tab](assets/Main.png)
+
+### Detail
+If you click on an expense, you'll see all the information of an expense: the name, amount, category and date.
+![Detail](assets/Detail.png)
+
+### Add Expense
+When you click on the + button you can create an expense, saying the title, amount and category.
+![Add Expense](assets/AddExpense.png)
+
+### Chart
+In the second tab you can see a chart with all the categories.
+![Chart](assets/Chart.png)
+
+### Filter
+You can filter the expenses if you click on the expenses menu.
+![Filter](assets/Filter.png)
+
+
+### Search
+You can search an expense by name
+![Search](assets/Search.png)
 
 ---
 
@@ -231,5 +254,3 @@ MIT — free to use, modify, and deploy.
 **Adrián Martín Malmierca**  
 Computer Engineer & Mobile Applications Master's Student  
 [GitHub](https://github.com/AdrianMalmierca) · [LinkedIn](https://www.linkedin.com/in/adri%C3%A1n-mart%C3%ADn-malmierca-4aa6b0293/)
-
-*Built as a Master's project and portfolio piece targeting the French tech market — ESNs and PMEs in Burgundy/Dijon.*
