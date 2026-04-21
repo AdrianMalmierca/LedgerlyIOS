@@ -6,7 +6,6 @@ import Combine
 final class ExpenseListViewModel: ObservableObject {
     
     // MARK: - Inputs
-    //@Published -> each change to these properties will trigger the view to update
     @Published var searchText: String = ""
     @Published var selectedCategory: String? = nil
     
@@ -54,11 +53,11 @@ final class ExpenseListViewModel: ObservableObject {
     }
     
     // MARK: - Combine bindings
-    private func setupBindings() {
+    private func setupBindings() { //this method sets up the reactive bindings between the search text, selected category, and the filtered expenses list
         //Reactive filter: category + search
-        Publishers.CombineLatest($searchText, $selectedCategory)
+        Publishers.CombineLatest($searchText, $selectedCategory) //Combines the latest values of searchText and selectedCategory into a tuple (query, category) every time either of them changes
             .map { [weak self] (query, category) -> [Expense] in //Transforms the combination into a new filtered list. [weak self] prevents hold cycles
-                guard let self = self else { return [] }
+                guard let self = self else { return [] } //if self has been deallocated, we return an empty array to avoid crashes
                 return self.expenses.filter { expense in
                     let matchesCategory = category == nil || expense.category == category
                     let matchesSearch = query.isEmpty || expense.title.lowercased().contains(query.lowercased())

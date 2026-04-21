@@ -32,7 +32,7 @@ final class ExpenseRepository: ExpenseRepositoryProtocol {
         }
     }
     
-    func insertExpense(_ expense: Expense) {
+    func insertExpense(_ expense: Expense) { //build the object to be stored in the database
         //you create a new ExpenseEntity in the context and set its properties
         let entity = ExpenseEntity(context: context)
         entity.id = expense.id
@@ -52,7 +52,7 @@ final class ExpenseRepository: ExpenseRepositoryProtocol {
         let request: NSFetchRequest<ExpenseEntity> = ExpenseEntity.fetchRequest()
         
         //you set a predicate to filter the entities by id
-        request.predicate = NSPredicate(format: "id == %@", expense.id as CVarArg) //CVarArg because the id is UUID type
+        request.predicate = NSPredicate(format: "id == %@", expense.id as CVarArg) //CVarArg because the id is UUID type 
 
         //you execute the fetch request, if you find the entity, you delete it from the context and save the changes
         if let entities = try? context.fetch(request), let entityToDelete = entities.first {

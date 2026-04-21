@@ -1,6 +1,6 @@
 import CoreData
 
-final class CoreDataStack {
+final class CoreDataStack { //this class is responsible for setting up and managing the Core Data stack, which includes loading the model, creating the persistent container, and providing access to the context for performing database operations.
     
     //the instance of the stack, singleton pattern
     static let shared = CoreDataStack()

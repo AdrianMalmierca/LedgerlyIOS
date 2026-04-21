@@ -42,6 +42,12 @@ struct AddExpenseView: View {
                         }
                     }.disabled(title.isEmpty || amount.isEmpty) //avoid saving an expense without title or amount
                 }
+                
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("close_button") {
+                        dismiss()
+                    }
+                }
             }.sheet(isPresented: $showAnimation) {
                 LottieView(name: "success")
                     .frame(width: 200, height: 200)
