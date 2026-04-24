@@ -8,7 +8,7 @@ final class ExpenseRepository: ExpenseRepositoryProtocol {
     private let network: NetworkServiceProtocol
     private let auth: AuthService
     
-    init(network: NetworkServiceProtocol? = nil, auth: AuthService = .shared) {
+    init(network: NetworkServiceProtocol? = nil, auth: AuthService) {
         self.network = network ?? NetworkService()
         self.auth = auth
     }

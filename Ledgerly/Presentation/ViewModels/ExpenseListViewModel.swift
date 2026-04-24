@@ -18,8 +18,7 @@ final class ExpenseListViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>() //to store our Combine subscriptions and cancel them when the view model is deallocated
     
     init(repository: ExpenseRepositoryProtocol? = nil) {
-        self.repository = repository ?? ExpenseRepository()
-        
+        self.repository = repository ?? ExpenseRepository(auth: .shared)
         loadExpenses()
         setupBindings()
     }
