@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		834A40802F9BB1A6008C80B3 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 834A407F2F9BB1A6008C80B3 /* FirebaseAuth */; };
 		83862F4E2F439700000D3322 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 83862F4D2F439700000D3322 /* SwiftUICharts */; };
 		83B22CBB2F439F720028FF25 /* Lottie-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 83B22CBA2F439F720028FF25 /* Lottie-Dynamic */; };
 /* End PBXBuildFile section */
@@ -28,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				834A40802F9BB1A6008C80B3 /* FirebaseAuth in Frameworks */,
 				83862F4E2F439700000D3322 /* SwiftUICharts in Frameworks */,
 				83B22CBB2F439F720028FF25 /* Lottie-Dynamic in Frameworks */,
 			);
@@ -36,10 +38,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		834A40702F9BB175008C80B3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		83DFF7462F4367DB00942A9D = {
 			isa = PBXGroup;
 			children = (
 				83DFF7512F4367DB00942A9D /* Ledgerly */,
+				834A40702F9BB175008C80B3 /* Frameworks */,
 				83DFF7502F4367DB00942A9D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -74,6 +84,7 @@
 			packageProductDependencies = (
 				83862F4D2F439700000D3322 /* SwiftUICharts */,
 				83B22CBA2F439F720028FF25 /* Lottie-Dynamic */,
+				834A407F2F9BB1A6008C80B3 /* FirebaseAuth */,
 			);
 			productName = Ledgerly;
 			productReference = 83DFF74F2F4367DB00942A9D /* Ledgerly.app */;
@@ -108,6 +119,7 @@
 			packageReferences = (
 				83862F4C2F439700000D3322 /* XCRemoteSwiftPackageReference "SwiftUICharts" */,
 				83B22CB92F439F720028FF25 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				8383C8B82F9AC2A400F0CE98 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 83DFF7502F4367DB00942A9D /* Products */;
@@ -353,6 +365,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		8383C8B82F9AC2A400F0CE98 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.12.1;
+			};
+		};
 		83862F4C2F439700000D3322 /* XCRemoteSwiftPackageReference "SwiftUICharts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/willdale/SwiftUICharts";
@@ -372,6 +392,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		834A407F2F9BB1A6008C80B3 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8383C8B82F9AC2A400F0CE98 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
 		83862F4D2F439700000D3322 /* SwiftUICharts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 83862F4C2F439700000D3322 /* XCRemoteSwiftPackageReference "SwiftUICharts" */;

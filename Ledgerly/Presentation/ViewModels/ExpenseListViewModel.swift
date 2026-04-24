@@ -36,7 +36,8 @@ final class ExpenseListViewModel: ObservableObject {
             title: title,
             amount: amount,
             date: Date(),
-            category: category
+            category: category,
+            userId: AuthService.shared.userId ?? ""
         )
         repository.addExpense(expense)
         loadExpenses()

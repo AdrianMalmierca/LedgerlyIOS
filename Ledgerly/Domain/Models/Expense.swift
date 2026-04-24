@@ -6,4 +6,5 @@ struct Expense: Identifiable, Codable {
     var amount: Double
     var date: Date
     var category: String
+    var userId: String
 }

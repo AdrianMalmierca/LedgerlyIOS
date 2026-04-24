@@ -65,6 +65,14 @@ struct LedgerlyTabView: View {
                             }
                         }
                     }
+                    
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(role: .destructive) {
+                            try? AuthService.shared.signOut()
+                        } label: {
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
+                        }
+                    }
                 }
                 .sheet(isPresented: $showingAdd) {
                     AddExpenseView { title, amount, category in

@@ -28,7 +28,8 @@ final class NetworkService: NetworkServiceProtocol {
                 title: $0.title,
                 amount: Double.random(in: 5...100),
                 date: Date(),
-                category: "Other"
+                category: "Other",
+                userId: ""
             )
         }
     }
