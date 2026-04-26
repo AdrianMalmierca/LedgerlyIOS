@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct LedgerlyTabView: View {
-    @StateObject private var viewModel = ExpenseListViewModel()
+    @EnvironmentObject private var viewModel: ExpenseListViewModel
     @State private var showingAdd = false
     
     private let categories = ["Food", "Transport", "Bills", "Other"]

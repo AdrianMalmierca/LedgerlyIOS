@@ -5,6 +5,8 @@ import Combine
 @MainActor //ensure that all properties and methods are executed on the main thread
 final class ExpenseListViewModel: ObservableObject {
     
+    private let auth: AuthViewModel
+    
     // MARK: - Inputs
     @Published var searchText: String = ""
     @Published var selectedCategory: String? = nil
@@ -17,8 +19,9 @@ final class ExpenseListViewModel: ObservableObject {
     private let repository: ExpenseRepositoryProtocol
     private var cancellables = Set<AnyCancellable>() //to store our Combine subscriptions and cancel them when the view model is deallocated
     
-    init(repository: ExpenseRepositoryProtocol? = nil) {
-        self.repository = repository ?? ExpenseRepository(auth: .shared)
+    init(repository: ExpenseRepositoryProtocol? = nil, auth: AuthViewModel) {
+        self.auth = auth  // ← añadir esto
+        self.repository = repository ?? ExpenseRepository(auth: auth)
         loadExpenses()
         setupBindings()
     }
@@ -36,7 +39,7 @@ final class ExpenseListViewModel: ObservableObject {
             amount: amount,
             date: Date(),
             category: category,
-            userId: AuthService.shared.userId ?? ""
+            userId: auth.userId ?? ""
         )
         repository.addExpense(expense)
         loadExpenses()

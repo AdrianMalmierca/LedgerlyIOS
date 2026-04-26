@@ -6,9 +6,9 @@ final class ExpenseRepository: ExpenseRepositoryProtocol {
     
     private let context = CoreDataStack.shared.context
     private let network: NetworkServiceProtocol
-    private let auth: AuthService
+    private let auth: AuthViewModel
     
-    init(network: NetworkServiceProtocol? = nil, auth: AuthService) {
+    init(network: NetworkServiceProtocol? = nil, auth: AuthViewModel) {
         self.network = network ?? NetworkService()
         self.auth = auth
     }
@@ -99,5 +99,4 @@ final class ExpenseRepository: ExpenseRepositoryProtocol {
         //you save the context
         try context.save()
     }
-
 }

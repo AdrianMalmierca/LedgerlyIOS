@@ -19,4 +19,3 @@ struct ExpensesChartView: View {
         .frame(height: 250)
     }
 }
-
