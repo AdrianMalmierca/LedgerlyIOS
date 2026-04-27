@@ -1,10 +1,3 @@
-//
-//  NotificationDelegate.swift
-//  Ledgerly
-//
-//  Created by Adrián on 27/4/26.
-//
-
 import UserNotifications
 
 final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
