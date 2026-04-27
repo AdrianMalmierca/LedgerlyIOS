@@ -6,7 +6,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         NotificationService.shared.requestAuthorization { granted, _ in
-            if granted { NotificationService.shared.scheduleDailyReminder() }
+            if granted {
+                NotificationService.shared.scheduleDailyReminder()
+            }
+            NotificationService.shared.scheduleOnLaunchReminder()
         }
         return true
     }
