@@ -2,18 +2,11 @@ import SwiftUI
 import FirebaseCore
 import FirebaseAuth
 
-class AppDelegate: NSObject, UIApplicationDelegate {
-    func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        NotificationService.shared.requestAuthorization { granted, _ in
-            if granted {
-                NotificationService.shared.scheduleDailyReminder()
-            }
-            NotificationService.shared.scheduleOnLaunchReminder()
-        }
-        return true
-    }
-}
+import SwiftUI
+import FirebaseCore
+import UserNotifications
+
+class AppDelegate: NSObject, UIApplicationDelegate {}
 
 @main
 struct LedgerlyApp: App {
@@ -24,6 +17,14 @@ struct LedgerlyApp: App {
     
     init() {
         FirebaseApp.configure()
+        
+        UNUserNotificationCenter.current().delegate = NotificationDelegate.shared
+        NotificationService.shared.requestAuthorization { granted, _ in
+            if granted {
+                NotificationService.shared.scheduleDailyReminder()
+            }
+            NotificationService.shared.scheduleOnLaunchReminder()
+        }
         
         let auth = AuthViewModel()
         _authViewModel = StateObject(wrappedValue: auth)
