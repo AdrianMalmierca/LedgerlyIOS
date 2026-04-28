@@ -3,8 +3,8 @@
 ![Swift](https://img.shields.io/badge/Swift-5.9-FA7343?style=flat-square&logo=swift)
 ![SwiftUI](https://img.shields.io/badge/SwiftUI-5-0A84FF?style=flat-square&logo=apple)
 ![CoreData](https://img.shields.io/badge/CoreData-Almacenamiento_Local-6C757D?style=flat-square)
+![Firebase](https://img.shields.io/badge/Firebase-Backend-FFCA28?style=flat-square&logo=firebase)
 ![Lottie](https://img.shields.io/badge/Lottie-4-00C4CC?style=flat-square)
-
 Aplicación iOS nativa para el registro de gastos personales, construida con SwiftUI y arquitectura MVVM. Los gastos se almacenan localmente con Core Data, se sincronizan con un backend remoto mediante async/await, y la interfaz incluye localización en francés e inglés desde el primer momento.
 
 ---
@@ -14,6 +14,7 @@ Aplicación iOS nativa para el registro de gastos personales, construida con Swi
 La mayoría de aplicaciones de control de gastos son demasiado complejas (suites de presupuesto completas) o demasiado simples (notas planas). Ledgerly ocupa el punto intermedio: una herramienta enfocada en registrar gastos diarios, categorizarlos, visualizar patrones de gasto y recibir recordatorios diarios — todo sin cuenta de usuario ni dependencia de la nube.
 
 Ledgerly lo resuelve proporcionando:
+- Almacenamiento y gestión de usuarios mediante Firebase
 - Almacenamiento local offline-first con Core Data — funciona sin conexión
 - Filtrado por categoría y búsqueda en tiempo real con bindings reactivos de Combine
 - Visualización de gastos por categoría con gráfico de barras usando Swift Charts
@@ -23,6 +24,16 @@ Ledgerly lo resuelve proporcionando:
 ---
 
 ## Capturas de pantalla
+
+### Inicio de sesión
+Pantalla donde el usuario puede iniciar sesión, en caso de no tener puede clicar en el enlace inferior para registrarse.
+
+<img src="assets/Main.png" width="300">
+
+### Registro
+Pantalla de registro de usuario.
+
+<img src="assets/Main.png" width="300">
 
 ### Lista de gastos
 Pantalla principal con barra de búsqueda, chips de filtro por categoría y lista completa de gastos.
@@ -90,6 +101,7 @@ Puedes buscar un gasto por nombre.
 | Framework UI | SwiftUI | UI declarativa con aspecto nativo iOS |
 | Arquitectura | MVVM | Separación limpia entre vista, estado y capa de datos |
 | Almacenamiento local | Core Data | Persistencia offline-first de gastos |
+| Autenticación | FireBase | Autenticación mediante acceso a firebase, permitiendo iniciar sesión, registrar y eliminar cuenta |
 | Bindings reactivos | Combine | Búsqueda + filtro en tiempo real sin recargas manuales |
 | Gráficos | Swift Charts | Gráfico de barras nativo sin dependencias |
 | Animaciones | Lottie (iOS) | Animación de éxito al guardar un gasto |
@@ -103,36 +115,40 @@ Puedes buscar un gasto por nombre.
 
 ```
 Ledgerly/
-├── LedgerlyApp.swift                    # Punto de entrada — solicitud de permiso de notificaciones al arrancar
+├── LedgerlyApp.swift                    #Punto de entrada — solicitud de permiso de notificaciones al arrancar
 │
 ├── data/
 │   ├── network/
-│   │   └── NetworkService.swift         # NetworkServiceProtocol + fetch y POST async/await con URLSession
+│   │   └── NetworkService.swift         #NetworkServiceProtocol + fetch y POST async/await con URLSession
 │   ├── persistence/
-│   │   ├── CoreDataStack.swift          # Singleton NSPersistentContainer + acceso al viewContext
-│   │   └── LedgerlyModel.xcdatamodeld  # Modelo Core Data — esquema de ExpenseEntity
+│   │   ├── CoreDataStack.swift          #Singleton NSPersistentContainer + acceso al viewContext
+│   │   └── LedgerlyModel.xcdatamodeld   #Modelo Core Data — esquema de ExpenseEntity
 │   └── repositories/
-│       └── ExpenseRepository.swift      # Implementación de ExpenseRepositoryProtocol — CRUD + sincronización
+│       └── ExpenseRepository.swift      #Implementación de ExpenseRepositoryProtocol — CRUD + sincronización
 │
 ├── domain/
 │   ├── models/
-│   │   └── Expense.swift                # Tipo de valor Expense — Identifiable + Codable
+│   │   └── Expense.swift                #Tipo de valor Expense — Identifiable + Codable
 │   └── repositories/
-│       └── ExpenseRepositoryProtocol.swift  # Protocolo que define la interfaz del repositorio
+│       └── ExpenseRepositoryProtocol.swift  #Protocolo que define la interfaz del repositorio
 │
 ├── presentation/
 │   ├── viewmodels/
-│   │   └── ExpenseListViewModel.swift   # @MainActor ObservableObject — pipeline Combine + acciones CRUD
+│   │   ├── ExpenseListViewModel.swift   #@MainActor ObservableObject — pipeline Combine + acciones CRUD
+│   │   ├── AuthViewModel.swift   		 #Mediador entre el servicio y la vista para poder acceder a firebase
+│   │   └── LottieView.swift             #Wrapper UIViewRepresentable para Lottie
 │   └── views/
-│       ├── LedgerlyTabView.swift        # TabView raíz — pestaña de lista + pestaña de gráfico
-│       ├── AddExpenseView.swift         # Formulario en sheet con animación Lottie de éxito
-│       ├── ExpenseDetailView.swift      # Pantalla de detalle de un gasto seleccionado
-│       ├── ExpensesChartView.swift      # Gráfico de barras por categoría con Swift Charts
-│       ├── CategoriesGridView.swift     # Chips de filtro por categoría con scroll horizontal
-│       └── LottieView.swift             # Wrapper UIViewRepresentable para Lottie
+│       ├── LedgerlyTabView.swift        #TabView raíz — pestaña de lista + pestaña de gráfico
+│       ├── AddExpenseView.swift         #Formulario en sheet con animación Lottie de éxito
+│       ├── ExpenseDetailView.swift      #Pantalla de detalle de un gasto seleccionado
+│       ├── ExpensesChartView.swift      #Gráfico de barras por categoría con Swift Charts
+│       └── CategoriesGridView.swift     #Chips de filtro por categoría con scroll horizontal
+│
 │
 └── services/
-    └── NotificationService.swift        # Programación de notificaciones diarias y al arrancar
+    ├── AuthService.swift  		     #AuthService, conexión a firebase para poder acceder a la cuenta del usaurio
+    ├── NotificationService.swift    #Programación de notificaciones diarias y al arrancar
+    └── NotificationDelegate.swift   #Delegado para que las notificaciones se muestren y con sonido
 ```
 
 ---
@@ -145,10 +161,10 @@ Ledgerly sigue una estructura MVVM estricta con patrón repositorio que separa l
 Vista (SwiftUI)
   └── ExpenseListViewModel (@MainActor, ObservableObject)
         └── ExpenseRepositoryProtocol
-              ├── ExpenseRepository (CoreData + Network)
-              │     ├── CoreDataStack (NSPersistentContainer)
-              │     └── NetworkService (URLSession async/await)
-              └── [MockRepository para tests]
+              └── ExpenseRepository (CoreData + Network)
+                	   ├── CoreDataStack (NSPersistentContainer)
+                	   └── NetworkService (URLSession async/await)
+
 ```
 
 El `ExpenseListViewModel` mantiene dos arrays `@Published`: `expenses` (datos en bruto) y `filteredExpenses` (derivado). Un publisher `CombineLatest` sobre `searchText` y `selectedCategory` recalcula `filteredExpenses` reactivamente en cada pulsación o cambio de filtro — sin llamadas manuales de recarga desde la vista.
@@ -178,26 +194,49 @@ Tanto `ExpenseListViewModel` como `ExpenseRepository` están anotados con `@Main
 
 Todas las cadenas visibles al usuario usan el formato de catálogo `.xcstrings` de Xcode 15. Las claves se pasan como `String(localized: "clave")` o directamente como `LocalizedStringKey` en las vistas SwiftUI.
 
-| Clave | Inglés | Francés |
-|-------|--------|---------|
-| `new_expense_title` | New Expense | Nouvelle dépense |
-| `field_title` | Title | Titre |
-| `field_amount` | Amount | Montant |
-| `section_category` | Category | Catégorie |
-| `save_button` | Save | Enregistrer |
-| `sync_button` | Sync | Synchroniser |
-| `tab_expenses` | Expenses | Dépenses |
-| `tab_chart` | Chart | Graphique |
-| `notification_title` | Don't forget your expenses! | N'oublie pas tes dépenses ! |
-| `notification_body` | Log today's spending in Ledgerly. | Enregistre tes dépenses du jour dans Ledgerly. |
+| Clave                    | Inglés                                                           | Español                                                | Francés                                                             |
+| ------------------------ | ---------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------- |
+| `€`                      | $                                                                | €                                                      | €                                                                   |
+| `Ledgerly`               | Ledgerly                                                         | Ledgerly                                               | Ledgerly                                                            |
+| `cancel_button`          | Cancel                                                           | Cancelar                                               | Annuler                                                             |
+| `close_button`           | Close                                                            | Cerrar                                                 | Fermer                                                              |
+| `delete_account_confirm` | Delete                                                           | Eliminar                                               | Supprimer                                                           |
+| `delete_account_message` | This will permanently delete your account and all your expenses. | Eliminará permanentemente tu cuenta y todos tus gastos | Cela supprimera définitivement votre compte et toutes vos dépenses. |
+| `delete_account_title`   | Delete Account                                                   | Eliminar cuenta                                        | Supprimer le compte                                                 |
+| `expense_date`           | Date                                                             | Fecha                                                  | Date                                                                |
+| `field_amount`           | Amount                                                           | Cantidad                                               | Montant                                                             |
+| `field_confirm_password` | Confirm Password                                                 | Confirmar contraseña                                   | Confirmer le mot de passe                                           |
+| `field_email`            | Email                                                            | Correo electrónico                                     | E-mail                                                              |
+| `field_password`         | Password                                                         | Contraseña                                             | Mot de passe                                                        |
+| `field_title`            | Title                                                            | Título                                                 | Titre                                                               |
+| `login_button`           | Sign In                                                          | Iniciar sesión                                         | Se connecter                                                        |
+| `login_subtitle`         | Sign in to your account                                          | Inicia sesión en tu cuenta                             | Connectez-vous à votre compte                                       |
+| `new_expense_title`      | New Expense                                                      | Nuevo gasto                                            | Nouvelle dépense                                                    |
+| `no_account_label`       | Don't have an account?                                           | ¿No tienes cuenta?                                     | Vous n'avez pas de compte ?                                         |
+| `notification_body`      | Record your daily expenses...                                    | Registra tus gastos diarios...                         | Enregistre tes dépenses du jour...                                  |
+| `notification_title`     | Don't forget your expenses                                       | No olvides tus gastos                                  | N'oublie pas tes dépenses                                           |
+| `picker_category`        | Select category                                                  | Selecciona categoría                                   | Choisir une catégorie                                               |
+| `save_button`            | Save                                                             | Guardar                                                | Enregistrer                                                         |
+| `search_placeholder`     | Search expense...                                                | Buscar gasto…                                          | Rechercher une dépense...                                           |
+| `section_amount`         | Amount                                                           | Cantidad                                               | Montant                                                             |
+| `section_category`       | Category                                                         | Categoría                                              | Catégorie                                                           |
+| `section_details`        | Details                                                          | Detalles                                               | Détails                                                             |
+| `signup_button`          | Create Account                                                   | Crear cuenta                                           | Créer un compte                                                     |
+| `signup_link`            | Sign Up                                                          | Regístrate                                             | S'inscrire                                                          |
+| `signup_subtitle`        | Track your expenses                                              | Registra tus gastos                                    | Suivez vos dépenses                                                 |
+| `signup_title`           | Create Account                                                   | Crear cuenta                                           | Créer un compte                                                     |
+| `sync_button`            | Sync                                                             | Sync                                                   | Sync                                                                |
+| `tab_chart`              | Chart                                                            | Gráfico                                                | Graphique                                                           |
+| `tab_expenses`           | Expenses                                                         | Gastos                                                 | Dépenses                                                            |
+| `total_amount`           | Total amount                                                     | Importe total                                          | Montant total                                                       |
 
 ---
 
 ## Ejecución en local
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/AdrianMalmierca/Ledgerly.git
+#Clonar el repositorio
+git clone https://github.com/AdrianMalmierca/LedgerlyIOS.git
 cd Ledgerly
 
 # Abrir en Xcode
@@ -241,7 +280,6 @@ La solicitud de permiso de notificaciones debe producirse en el momento adecuado
 - **Exportación** — compartir gastos como CSV
 
 ### Medio plazo
-- **Sincronización con iCloud** — sustituir el backend mock por CloudKit para sincronización real entre dispositivos
 - **Widgets** — widget de pantalla de inicio con WidgetKit mostrando el gasto total del día
 
 ### Largo plazo
@@ -261,5 +299,3 @@ MIT — libre de usar, modificar y desplegar.
 **Adrián Martín Malmierca**  
 Ingeniero Informático y Estudiante de Máster en Aplicaciones Móviles  
 [GitHub](https://github.com/AdrianMalmierca) · [LinkedIn](https://www.linkedin.com/in/adri%C3%A1n-mart%C3%ADn-malmierca-4aa6b0293/)
-
-*Construido como proyecto de portfolio orientado al mercado tecnológico francés — ESNs y consultoras en Borgoña/Dijon.*
