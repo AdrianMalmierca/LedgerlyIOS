@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import FirebaseAuth
 
 @MainActor //ensure that all properties and methods are executed on the main thread
 final class ExpenseListViewModel: ObservableObject {
@@ -48,6 +49,14 @@ final class ExpenseListViewModel: ObservableObject {
     func deleteExpense(_ expense: Expense) {
         repository.deleteExpense(expense)
         loadExpenses()
+    }
+    
+    func deleteAccount() async {
+        for expense in expenses {
+            repository.deleteExpense(expense)
+        }
+        
+        try? await Auth.auth().currentUser?.delete()
     }
     
     func sync() async {

@@ -3,6 +3,7 @@ import SwiftUI
 struct LedgerlyTabView: View {
     @EnvironmentObject private var viewModel: ExpenseListViewModel
     @State private var showingAdd = false
+    @State private var showingDeleteAccount = false
     
     private let categories = ["Food", "Transport", "Bills", "Other"]
     
@@ -73,11 +74,29 @@ struct LedgerlyTabView: View {
                             Image(systemName: "rectangle.portrait.and.arrow.right")
                         }
                     }
+                    
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(role: .destructive) {
+                            showingDeleteAccount = true
+                        } label: {
+                            Image(systemName: "person.badge.minus")
+                        }
+                    }
                 }
                 .sheet(isPresented: $showingAdd) {
                     AddExpenseView { title, amount, category in
                         viewModel.addExpense(title: title, amount: amount, category: category)
                     }
+                }
+                .alert("delete_account_title", isPresented: $showingDeleteAccount) {
+                    Button("delete_account_confirm", role: .destructive) {
+                        Task {
+                            await viewModel.deleteAccount()
+                        }
+                    }
+                    Button("cancel_button", role: .cancel) {}
+                } message: {
+                    Text("delete_account_message")
                 }
             }
             .tabItem {
