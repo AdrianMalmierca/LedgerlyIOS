@@ -314,3 +314,5 @@ MIT — free to use, modify, and deploy.
 **Adrián Martín Malmierca**  
 Computer Engineer & Master's Student in Mobile Applications  
 [GitHub](https://github.com/AdrianMalmierca) · [LinkedIn](https://www.linkedin.com/in/adri%C3%A1n-mart%C3%ADn-malmierca-4aa6b0293/)
+
+_Built as the Android counterpart to the [Ledgerly Android app](https://github.com/AdrianMalmierca/LedgerlyAndroid)._
